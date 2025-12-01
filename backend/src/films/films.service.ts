@@ -35,7 +35,7 @@ export class FilmsService {
       title: film.title,
       director: film.director,
       rating: film.rating,
-      tags: film.tags ? film.tags.split(',') : [],
+      tags: film.tags,
       image: film.image,
       cover: film.cover,
       about: film.about,

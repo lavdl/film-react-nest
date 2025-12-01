@@ -40,7 +40,7 @@ export class OrderService {
         throw new BadRequestException(`Сеанс не найден: ${session}`);
       }
 
-      const takenSeats = schedule.taken ? schedule.taken.split(',') : [];
+      const takenSeats = [...(schedule.taken || [])];
 
       if (takenSeats.includes(seatCode)) {
         throw new BadRequestException(
@@ -50,7 +50,7 @@ export class OrderService {
 
       takenSeats.push(seatCode);
 
-      schedule.taken = takenSeats.join(',');
+      schedule.taken = takenSeats;
 
       await this.filmsService.saveSchedule(schedule);
 
