@@ -1,27 +1,28 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { configProvider } from './app.config.provider';
-import { MongooseModule } from '@nestjs/mongoose';
-
+import { ConfigModule } from '@nestjs/config';
 import { FilmsModule } from './films/films.module';
 import { OrderController } from './order/order.controller';
 import { OrderService } from './order/order.service';
+import { OrmConfigModule } from './app.orm-config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public', 'content', 'afisha'),
       serveRoot: '/content/afisha',
     }),
 
-    MongooseModule.forRoot(process.env.DATABASE_URL),
-
+    OrmConfigModule,
     FilmsModule,
   ],
 
   controllers: [OrderController],
-
-  providers: [configProvider, OrderService],
+  providers: [OrderService],
 })
 export class AppModule {}

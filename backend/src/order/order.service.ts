@@ -15,25 +15,24 @@ export class OrderService {
     }
 
     const resultItems = [];
-
     const localSeats = new Set<string>();
 
     for (const t of tickets) {
-      const { film, session, row, seat, price } = t;
+      const { film: filmId, session, row, seat, price } = t;
 
       const seatCode = `${row}:${seat}`;
-      const localKey = `${film}:${session}:${seatCode}`;
+      const localKey = `${filmId}:${session}:${seatCode}`;
 
       if (localSeats.has(localKey)) {
         throw new BadRequestException(
-          `Повторяющееся место в заказе: фильм ${film}, сеанс ${session}, ряд ${row}, место ${seat}`,
+          `Повторяющееся место в заказе: фильм ${filmId}, сеанс ${session}, ряд ${row}, место ${seat}`,
         );
       }
       localSeats.add(localKey);
 
-      const filmData = await this.filmsService.findById(film);
+      const filmData = await this.filmsService.findById(filmId);
       if (!filmData) {
-        throw new BadRequestException(`Фильм не найден: ${film}`);
+        throw new BadRequestException(`Фильм не найден: ${filmId}`);
       }
 
       const schedule = filmData.schedule.find((s) => s.id === session);
@@ -41,17 +40,22 @@ export class OrderService {
         throw new BadRequestException(`Сеанс не найден: ${session}`);
       }
 
-      const seatTakenCode = `${row}:${seat}`;
-      if (schedule.taken.includes(seatTakenCode)) {
+      const takenSeats = schedule.taken ? schedule.taken.split(',') : [];
+
+      if (takenSeats.includes(seatCode)) {
         throw new BadRequestException(
           `Место уже занято: ряд ${row}, место ${seat}`,
         );
       }
 
-      schedule.taken.push(seatTakenCode);
+      takenSeats.push(seatCode);
+
+      schedule.taken = takenSeats.join(',');
+
+      await this.filmsService.saveSchedule(schedule);
 
       resultItems.push({
-        film,
+        film: filmId,
         session,
         daytime: schedule.daytime,
         row,
@@ -59,8 +63,6 @@ export class OrderService {
         price: price ?? schedule.price,
         id: randomUUID(),
       });
-
-      await filmData.save();
     }
 
     return {
