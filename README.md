@@ -2,7 +2,7 @@
 
 ## Задеплоенное приложение
 
-[https://github.com/lavdl/film-react-nest/pull/3](http://lavdl.nomorepartiessbs.ru/)
+http://lavdl.nomorepartiessbs.ru/
 
 ## Установка
 
