@@ -2,7 +2,7 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches: [ review ]
+    branches: review 
 
 permissions:
   contents: read
@@ -43,3 +43,4 @@ jobs:
           build-args: |
             VITE_API_URL=/api/afisha
             VITE_CDN_URL=/content/afisha
+
