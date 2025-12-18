@@ -1,9 +1,5 @@
 # FILM!
 
-## Задеплоенное приложение
-
-http://lavdl.nomorepartiessbs.ru/
-
 ## Установка
 
 ### MongoDB
