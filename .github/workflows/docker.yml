@@ -2,8 +2,7 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches:
-      - review
+    branches: [ review ]
 
 permissions:
   contents: read
@@ -12,7 +11,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,14 +29,17 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./backend
+          file: ./backend/Dockerfile
           push: true
-          tags: |
-            ghcr.io/${{ github.repository }}-backend:latest
+          tags: ghcr.io/${{ github.repository }}-backend:latest
 
       - name: Build and push nginx
         uses: docker/build-push-action@v6
         with:
-          context: ./nginx
+          context: .
+          file: ./nginx/Dockerfile
           push: true
-          tags: |
-            ghcr.io/${{ github.repository }}-nginx:latest
+          tags: ghcr.io/${{ github.repository }}-nginx:latest
+          build-args: |
+            VITE_API_URL=/api/afisha
+            VITE_CDN_URL=/content/afisha
