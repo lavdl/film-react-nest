@@ -6,6 +6,7 @@ import { FilmsModule } from './films/films.module';
 import { OrderController } from './order/order.controller';
 import { OrderService } from './order/order.service';
 import { OrmConfigModule } from './app.orm-config';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { OrmConfigModule } from './app.orm-config';
       serveRoot: '/content/afisha',
     }),
 
+    LoggerModule,
     OrmConfigModule,
     FilmsModule,
   ],

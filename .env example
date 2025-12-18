@@ -1,0 +1,11 @@
+DATABASE_DRIVER=postgres
+DATABASE_HOST=postgres
+DATABASE_PORT=5432
+DATABASE_USERNAME=prac
+DATABASE_PASSWORD=student
+DATABASE_NAME=prac
+LOGGER=dev
+PGADMIN_EMAIL=test@test.ru
+PGADMIN_PASSWORD=test
+VITE_API_URL=http://localhost:3000/api/afisha
+VITE_CDN_URL=http://localhost:3000/content/afisha
